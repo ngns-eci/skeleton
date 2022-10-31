@@ -1,4 +1,4 @@
-## `rucksac/skeleton` :skull:
+## `ngns-eci/skeleton` :skull:
 
 An Odoo project skeleton and workflow for local development.
 
@@ -16,11 +16,11 @@ An Odoo project skeleton and workflow for local development.
     - [6. Run the thing](#6-run-the-thing)
 - [Day to day workflow](#day-to-day-workflow)
 - [Multiple version workflow](#multiple-version-workflow)
-- [A note about `source_paths`](#a-note-about-source_paths)
+- [A note about `sparse_paths`](#a-note-about-sparse_paths)
 
 ### What is this?
 
-This is a project skeleton and workflow that I use to manage and build multiple local development environments day to day. The skeleton is meant to be a starting place for a brand new project.
+This is a project skeleton and workflow that Holden Rehg uses to manage and build multiple local development environments day to day. The skeleton is meant to be a starting place for a brand new project.
 
 ---
 
@@ -48,7 +48,7 @@ If you have already used this skeleton and process before, here are a quick set 
 
 ```sh
 # clone...
-$ git clone https://github.com/rucksac/skeleton newproject
+$ git clone https://github.com/ngns-eci/skeleton newproject
 $ cd myproject
 
 # dependencies...
@@ -61,10 +61,10 @@ $ pdm update
 
 # bring up database...
 $ cp .env.sample .env
-$ docker-compose up -d
+$ docker compose up -d
 
 # make odoo.conf...
-$ cp samples/conf/odoo14.conf odoo.conf
+$ cp samples/conf/odoo16.conf odoo.conf
 
 # run...
 $ pdm run vendor/odoo/odoo-bin -c odoo.conf
@@ -78,7 +78,7 @@ $ pdm run vendor/odoo/odoo-bin -c odoo.conf
 #### 1. Clone the project
 
 ```sh
-$ git clone https://github.com/rucksac/skeleton myproject
+$ git clone https://github.com/ngns-eci/skeleton myproject
 $ cd myproject
 ```
 
@@ -95,7 +95,7 @@ location: vendor
 sources:
   - repo: https://github.com/odoo/odoo
     name: odoo
-    rev: 14.0
+    rev: 16.0
   - repo: https://github.com/OCA/project
     name: OCA--project
     rev: e64f8b5785ae25ef14e2e7084c37be0b4e89ba1e
@@ -195,11 +195,11 @@ $ pdm update
 
 #### 4. Setup the database
 
-I use `docker-compose` to bring up a quick postgres database for local development projects:
+I use `docker compose` to bring up a quick postgres database for local development projects:
 
 ```sh
 $ cp .env.sample .env
-$ docker-compose up -d
+$ docker compose up -d
 ```
 
 #### 5. Add `odoo.conf` and update
@@ -207,7 +207,7 @@ $ docker-compose up -d
 I have some sample `odoo.conf` file per version that can be dropped in to get going:
 
 ```sh
-$ cp samples/conf/odoo14.conf odoo.conf
+$ cp samples/conf/odoo16.conf odoo.conf
 ```
 
 Then you'll want to take a look to see if you need to make any configuration updates. You may need to set a master password, add any addon dependencies to your `addons_path`, change ports, update db connection details, etc.
@@ -234,7 +234,7 @@ I'm jumping in and out of projects throughout the day, so here are some common c
 
 If you are running the project via the `odoo-bin` script, then I simply need to `ctrl-c` to kill the Odoo process. Otherwise if you are using service scripts or a tool like surpervisor, you'll need to stop the service.
 
-Then stop the docker containers with `docker-compose stop`. If you don't stop the containers, you could run into port conflict errors when starting up a new project. If you ever need to get around this, just change port mapping in your `docker-compose.yml`.
+Then stop the docker containers with `docker compose stop`. If you don't stop the containers, you could run into port conflict errors when starting up a new project. If you ever need to get around this, just change port mapping in your `docker-compose.yml`.
 
 **Moving to the next project.**
 
@@ -257,7 +257,7 @@ $ pdm update
 Bring up the database:
 
 ```sh
-$ docker-compose up -d
+$ docker compose up -d
 ```
 
 Run the instance:
@@ -316,10 +316,10 @@ work/
 
 ---
 
-### A note about `source_paths`
+### A note about `sparse_paths`
 
 Gitman allows you to extract specific files from a dependency. This is great for Odoo projects because you can depend on an open source repo of addons like an OCA project and list the specific addons that your project needs vs downloading every addon.
 
-But there is a bug where running `gitman install` or `gitman update` doesn't bring in new modules after changing `source_paths`. I reported this as [an issue here](https://github.com/jacebrowning/gitman/issues/265).
+But there is a bug where running `gitman install` or `gitman update` doesn't bring in new modules after changing `sparse_paths`. I reported this as [an issue here](https://github.com/jacebrowning/gitman/issues/265).
 
 As a workaround, delete the folder dependency in `vendor/` and then re-run `gitman install`.
